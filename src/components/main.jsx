@@ -2,6 +2,7 @@ import {Navbar, Container, Nav} from 'react-bootstrap';
 import axios from 'axios';
 import Logo from '../images/logo.png';
 import {useEffect, useState} from 'react';
+import { useRouter } from 'next/router';
 
 export const Header = () => {
 
@@ -25,7 +26,7 @@ export const Header = () => {
                             {data.categoria}
                         </Nav.Link>    
                     ))}
-                    {/* <Nav.Link href="#features">Features</Nav.Link> */}
+                    <Nav.Link href="/login">Login</Nav.Link>
                 </Nav>
                 </Container>
             </Navbar>
