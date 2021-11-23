@@ -1,6 +1,6 @@
 import axios from "axios";
 
-function Categoria ({produtos}) {
+function CategoryIndex ({produtos}) {
   
   return(
     <>
@@ -20,10 +20,8 @@ function Categoria ({produtos}) {
 
 export async function getServerSideProps(context) {
 
-  const {id} = context.query;
-
   const response = await axios.get(
-    'http://react.professorburnes.com.br/categoria/'+id,
+    'http://react.professorburnes.com.br/',
   );
   const produtos = await response.data;
 
@@ -32,4 +30,4 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default Categoria;
+export default CategoryIndex;
