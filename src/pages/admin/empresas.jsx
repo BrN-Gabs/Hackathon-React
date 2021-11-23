@@ -16,18 +16,18 @@ import {
 import {InputForm} from '../../components/main';
 import axios from 'axios';
 
-export default function CategoryRegistration({ categories: fetchedCategories }) {
+export default function CompanyRegistration({ companies: fetchedCompanies }) {
   const toast = useToast();
 
-  const [categories, setCategories] = useState(fetchedCategories);
+  const [companies, setCompanies] = useState(fetchedCompanies);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [id, setId] = useState(null);
   const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
 
-  const [errors, setErrors] = useState({name: null, slug: null});
+  const [errors, setErrors] = useState({name: null, whatsapp: null});
 
   const isValidFormData = () => {
     if(!name) {
@@ -35,13 +35,13 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
       return false;
     }
 
-    if(!slug) {
-      setErrors({email: 'Slug is required'});
+    if(!whatsapp) {
+      setErrors({email: 'Whatsapp is required'});
       return false;
     }
 
-    if(categories.some(category => category.slug === slug && category._id !== id)) {
-      setErrors({slug: "Slug already in use"});
+    if(companies.some(company => company.whatsapp === whatsapp && company._id !== id)) {
+      setErrors({whatsapp: "Whatsapp already in use"});
       return
     }
 
@@ -49,24 +49,24 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     return true;
   }
 
-  const handleSubmitCreateCategory = async (e) => {
+  const handleSubmitCreateCompany = async (e) => {
     e.preventDefault();
 
     if(!isValidFormData()) return;
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/categories', {name, slug});
+      const {data} = await api.post('/companies', {name, whatsapp});
 
-      setCategories(categories.concat(data.data));
+      setCompanies(companies.concat(data.data));
   
       setName('');
-      setSlug('');
+      setWhatsapp('');
       toggleFormState();
       setIsLoading(false);
 
       toast({
-        title: "Categoria cadastrada.",
+        title: "Empresa cadastrada.",
         status: "success",
         duration: 3000,
         isClosable: true,
@@ -79,7 +79,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
   }
 
-  const handleSubmitUpdateCategory = async (e) => {
+  const handleSubmitUpdateCompany = async (e) => {
     e.preventDefault();
 
     if(!isValidFormData()) return;
@@ -87,11 +87,11 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     try {
       setIsLoading(true);
 
-      await axios.put(`/categories/${id}`, {name, slug});
-      setCategories(categories.map(category => category._id === id ? {name, slug, _id: id} : category));
+      await axios.put(`/companies/${id}`, {name, whatsapp});
+      setCompanies(companies.map(company => company._id === id ? {name, whatsapp, _id: id} : company));
   
       setName('');
-      setSlug('');
+      setWhatsapp('');
       setId(null);
       toggleFormState();
       setIsLoading(false);
@@ -103,10 +103,10 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     }
   }
 
-  const handleDeleteCategory = async (_id) => {
+  const handleDeleteCompany = async (_id) => {
     try {
-      await axios.delete(`/categories/${_id}`);
-      setCategories(categories.filter(category => category._id !== _id));
+      await axios.delete(`/companies/${_id}`);
+      setCompanies(companies.filter(company => company._id !== _id));
     }catch(err) {
       console.log(err);
     }
@@ -116,14 +116,14 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     setName(text);
   }
 
-  const handleChangeSlug = (text) => {
-    setSlug(text);
+  const handleChangeWhatsapp = (text) => {
+    setWhatsapp(text);
   }
 
-  const handleShowUpdateCategoryForm = (category) => {
-    setId(category._id);
-    setName(category.name);
-    setSlug(category.slug);
+  const handleShowUpdateCompanyForm = (company) => {
+    setId(company._id);
+    setName(company.name);
+    setWhatsapp(company.whatsapp);
     setIsFormOpen(true);
   }
 
@@ -141,13 +141,13 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     <Box margin="4">
 
     <Flex color="white" justifyContent="space-between">
-      <Text color="black" fontSize="2xl">Lista de Categorias</Text>
+      <Text color="black" fontSize="2xl">Lista de Empresas</Text>
       
       <Button colorScheme="blue" onClick={toggleFormState}>{isFormOpen ? '-' : '+'}</Button>
     </Flex>
 
     { isFormOpen && (
-      <VStack marginY="1rem" as="form" onSubmit={id ? handleSubmitUpdateCategory : handleSubmitCreateCategory}>
+      <VStack marginY="1rem" as="form" onSubmit={id ? handleSubmitUpdateCompany : handleSubmitCreateCompany}>
         <InputForm
           label="Nome"
           name="name"
@@ -157,11 +157,12 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
         />
 
         <InputForm 
-          label="Slug" 
-          name="slug" 
-          value={slug} 
-          onChange={e => handleChangeSlug(e.target.value)}
-          error={errors.slug}
+          label="Whatsapp" 
+          name="whatsapp"
+          type="number" 
+          value={whatsapp} 
+          onChange={e => handleChangeWhatsapp(e.target.value)}
+          error={errors.whatsapp}
         />
 
         <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id? 'Atualizar' : 'Cadastrar'}</Button>
@@ -172,19 +173,19 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
       <Thead bgColor="blue.500">
         <Tr>
           <Th textColor="white">Name</Th>
-          <Th textColor="white">Slug</Th>
+          <Th textColor="white">Whatsapp</Th>
           <Th textColor="white">Action</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {categories.map(category => (
-          <Tr key={category.slug}>
-            <Td>{category.name}</Td>
-            <Td>{category.slug}</Td>
+        {companies.map(company => (
+          <Tr key={company.whatsapp}>
+            <Td>{company.name}</Td>
+            <Td>{company.whatsapp}</Td>
             <Td>
               <Flex justifyContent="space-between">
-                <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateCategoryForm(category)}>Editar</Button>
-                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCategory(category._id)}>Remover</Button>
+                <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateCompanyForm(company)}>Editar</Button>
+                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCompany(company._id)}>Remover</Button>
               </Flex>
             </Td>
           </Tr>
@@ -199,11 +200,11 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await axios.get('/categories');
+    const { data } = await axios.get('/companies');
 
     return {
       props: {
-        categories: data.data
+        companies: data.data
       }
     }
   } catch (err) {

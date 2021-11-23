@@ -3,6 +3,12 @@ import axios from 'axios';
 import Logo from '../images/logo.png';
 import {useEffect, useState} from 'react';
 import { useRouter } from 'next/router';
+import { 
+    FormControl,
+    FormLabel,
+    Input,
+    FormErrorMessage
+} from "@chakra-ui/react"
 
 export const Header = () => {
 
@@ -60,6 +66,7 @@ export const HeaderAdmin = () => {
                             <NavDropdown title="Cadastro" id="collasible-nav-dropdown">
                                 <NavDropdown.Item href="/admin/produtos">Produtos</NavDropdown.Item>
                                 <NavDropdown.Item href="/admin/categorias">Categorias</NavDropdown.Item>
+                                <NavDropdown.Item href="/admin/empresas">Empresas</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>
@@ -73,4 +80,17 @@ export const LoginVerification = () => {
     const router = useRouter();
 
     return () => router.push('/admin/');
+}
+
+export const InputForm = ({ label, name, error = null, ...rest }) => {
+    
+    return (
+    <FormControl marginY="1rem" isInvalid={!!error}>
+        <FormLabel htmlFor={name}>{label}</FormLabel>
+        <Input name={name} id={name} {...rest} />
+
+        {!!error && <FormErrorMessage>{error}</FormErrorMessage>}
+        
+    </FormControl>
+    )
 }

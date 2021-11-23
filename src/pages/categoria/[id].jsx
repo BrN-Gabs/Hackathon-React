@@ -1,11 +1,11 @@
 import axios from "axios";
 
-function Category ({product}) {
+function Category ({produtos}) {
   
   return(
     <>
-      {product ?
-        product.map((item) => (
+      {produtos ?
+        produtos.map((item) => (
           <h1>{item.produto}</h1>
           
         ))
@@ -25,10 +25,10 @@ export async function getServerSideProps(context) {
   const response = await axios.get(
     'http://react.professorburnes.com.br/categoria/'+id,
   );
-  const product = await response.data;
+  const produtos = await response.data;
 
   return {
-    props: {product}, 
+    props: {produtos}, 
   };
 }
 
