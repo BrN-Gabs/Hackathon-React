@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "../services/api";
 
 function CategoryIndex ({produtos}) {
   
@@ -20,9 +20,7 @@ function CategoryIndex ({produtos}) {
 
 export async function getServerSideProps(context) {
 
-  const response = await axios.get(
-    'http://react.professorburnes.com.br/',
-  );
+  const response = await api.get();
   const produtos = await response.data;
 
   return {

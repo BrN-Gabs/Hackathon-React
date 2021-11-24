@@ -14,7 +14,7 @@ import {
   useToast
 } from "@chakra-ui/react"
 import {InputForm} from '../../components/main';
-import axios from 'axios';
+import api from "../../services/api";
 
 export default function CompanyRegistration({ companies: fetchedCompanies }) {
   const toast = useToast();
@@ -87,7 +87,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
     try {
       setIsLoading(true);
 
-      await axios.put(`/companies/${id}`, {name, whatsapp});
+      await api.put(`/companies/${id}`, {name, whatsapp});
       setCompanies(companies.map(company => company._id === id ? {name, whatsapp, _id: id} : company));
   
       setName('');
@@ -105,7 +105,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
   const handleDeleteCompany = async (_id) => {
     try {
-      await axios.delete(`/companies/${_id}`);
+      await api.delete(`/companies/${_id}`);
       setCompanies(companies.filter(company => company._id !== _id));
     }catch(err) {
       console.log(err);
@@ -200,7 +200,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await axios.get('/companies');
+    const { data } = await api.get('/companies');
 
     return {
       props: {

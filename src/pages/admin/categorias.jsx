@@ -14,7 +14,7 @@ import {
   useToast
 } from "@chakra-ui/react"
 import {InputForm} from '../../components/main';
-import axios from 'axios';
+import api from "../../services/api";
 
 export default function CategoryRegistration({ categories: fetchedCategories }) {
   const toast = useToast();
@@ -87,7 +87,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     try {
       setIsLoading(true);
 
-      await axios.put(`/categories/${id}`, {name, slug});
+      await api.put(`/categories/${id}`, {name, slug});
       setCategories(categories.map(category => category._id === id ? {name, slug, _id: id} : category));
   
       setName('');
@@ -105,7 +105,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
   const handleDeleteCategory = async (_id) => {
     try {
-      await axios.delete(`/categories/${_id}`);
+      await api.delete(`/categories/${_id}`);
       setCategories(categories.filter(category => category._id !== _id));
     }catch(err) {
       console.log(err);
@@ -199,7 +199,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await axios.get('/categories');
+    const { data } = await api.get('/categories');
 
     return {
       props: {
