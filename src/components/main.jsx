@@ -2,7 +2,6 @@ import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap';
 import axios from 'axios';
 import Logo from '../images/logo.png';
 import {useEffect, useState} from 'react';
-import { useRouter } from 'next/router';
 import { 
     FormControl,
     FormLabel,
@@ -74,12 +73,6 @@ export const HeaderAdmin = () => {
             </Navbar>
         </>
     )
-}
-
-export const LoginVerification = () => {
-    const router = useRouter();
-
-    return () => router.push('/admin/');
 }
 
 export const InputForm = ({ label, name, error = null, ...rest }) => {
