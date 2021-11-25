@@ -8,6 +8,7 @@ const Login = () => {
   
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [tipo, setTipo] = useState('');
 
   const [errors, setErrors] = useState({email: null, senha: null});
 
@@ -31,7 +32,6 @@ const Login = () => {
 
 
   async function handleLogin(e) {
-    console.log(email, senha);
     e.preventDefault();
 
     isValidFormData();
@@ -71,10 +71,6 @@ const Login = () => {
                 error={errors.senha}
                 onChange={e => setSenha(e.target.value)}
               />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="formBasicCheckbox">
-                <Form.Check type="checkbox" label="Lembrar senha" />
             </Form.Group>
 
             <Button variant="primary" type="submit">

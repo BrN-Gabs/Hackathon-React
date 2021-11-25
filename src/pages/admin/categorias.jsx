@@ -27,6 +27,8 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
   const [name, setName] = useState('');
   const [slug, setSlug] = useState('');
 
+  
+
   const [errors, setErrors] = useState({name: null, slug: null});
 
   const isValidFormData = () => {
@@ -199,7 +201,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await api.get('/categories');
+    const { data } = await api.get('/categoria');
 
     return {
       props: {

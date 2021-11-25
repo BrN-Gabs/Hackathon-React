@@ -36,7 +36,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
     }
 
     if(!whatsapp) {
-      setErrors({email: 'Whatsapp is required'});
+      setErrors({whatsapp: 'Whatsapp is required'});
       return false;
     }
 

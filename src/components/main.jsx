@@ -1,5 +1,5 @@
 import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap';
-import axios from 'axios';
+import api from "../services/api";
 import Logo from '../images/logo.png';
 import {useEffect, useState} from 'react';
 import { 
@@ -14,7 +14,7 @@ export const Header = () => {
     const [category, getCategory] = useState([]);
 
     useEffect(() => {
-        axios.get('http://react.professorburnes.com.br/categoria').then((response)=> {
+        api.get('/categoria').then((response)=> {
             getCategory(response.data);
         })
     },[])
