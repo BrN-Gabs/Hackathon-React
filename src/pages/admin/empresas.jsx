@@ -178,7 +178,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
         </Tr>
       </Thead>
       <Tbody>
-        {companies.map(company => (
+        {/* {companies.map(company => (
           <Tr key={company.whatsapp}>
             <Td>{company.name}</Td>
             <Td>{company.whatsapp}</Td>
@@ -189,7 +189,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
               </Flex>
             </Td>
           </Tr>
-        ))}
+        ))} */}
       </Tbody>
 
     </Table>

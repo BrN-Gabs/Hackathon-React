@@ -87,3 +87,16 @@ export const InputForm = ({ label, name, error = null, ...rest }) => {
     </FormControl>
     )
 }
+
+export const Verification = (email, senha, router) => {
+    if (email == "teste@hotmail.com" && senha == "cavalo") {
+      router.push('/admin/');
+    } else {
+      alert('Falha no login, email ou senha estão incorretos.');
+    } 
+}
+
+export const formataValor = (valor) => {
+    valor = parseFloat(valor);
+    return valor.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
+}

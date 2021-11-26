@@ -1,20 +1,18 @@
 import {Form, Button} from 'react-bootstrap';
-import {InputForm, Validation} from '../components/main';
-import {useEffect, useState} from 'react'
-import { useRouter } from 'next/router';
+import {InputForm, Verification} from '../components/main';
+import {useState} from 'react'
+import {useRouter} from 'next/router';
 
 
 const Login = () => {
   
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
-  const [tipo, setTipo] = useState('');
 
   const [errors, setErrors] = useState({email: null, senha: null});
 
   const router = useRouter();
- 
-
+  
   const isValidFormData = () => {
     if(!email) {
       setErrors({email: 'E-mail is required'});
@@ -29,21 +27,11 @@ const Login = () => {
     setErrors({});
     return true
   }
-
-
+  
   async function handleLogin(e) {
-    e.preventDefault();
-
-    isValidFormData();
-    
-    if (email == "teste@hotmail.com" && senha == "cavalo") {
-
-      router.push('/admin/');
-
-    } else {
-      alert('Falha no login, email ou senha estão incorretos.');
-    } 
-
+      e.preventDefault();
+      isValidFormData();
+      Verification(email, senha, router);
   }
 
     return (
@@ -80,18 +68,5 @@ const Login = () => {
       </>
     )
 }
-
-/* export async function getServerSideProps(context) {
-
-    const response = await axios.get(
-      'Api - get/usuarios',
-    );
-    const usuarios = await response.data;
-  
-    return {
-      props: {usuarios}, 
-    };
-} */
-
 
 export default Login;

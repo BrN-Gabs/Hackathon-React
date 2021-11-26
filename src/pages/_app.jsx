@@ -11,11 +11,11 @@ function MyApp({ Component, pageProps }) {
 
     if (page == "/admin" || page == "/admin/categorias" || page == "/admin/produtos" || page == "/admin/empresas") {
       return <>
-        <HeaderAdmin></HeaderAdmin>
-        <ChakraProvider>
-          <Component {...pageProps} />
-        </ChakraProvider>
-        <Footer></Footer>
+          <HeaderAdmin></HeaderAdmin>
+          <ChakraProvider>
+            <Component {...pageProps} />
+          </ChakraProvider>
+          <Footer></Footer>
       </>
     } else {
       return <>
