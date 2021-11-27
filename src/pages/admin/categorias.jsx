@@ -179,7 +179,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
         </Tr>
       </Thead>
       <Tbody>
-        {/* {categories.map(category => (
+       {/* {categories.map(category => (
           <Tr key={category.slug}>
             <Td>{category.name}</Td>
             <Td>{category.slug}</Td>
@@ -190,7 +190,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
               </Flex>
             </Td>
           </Tr>
-        ))} */}
+        ))}  */}
       </Tbody>
 
     </Table>

@@ -56,7 +56,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/companies', {name, whatsapp});
+      const {data} = await api.post('/company', {name, whatsapp});
 
       setCompanies(companies.concat(data.data));
   
@@ -87,7 +87,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
     try {
       setIsLoading(true);
 
-      await api.put(`/companies/${id}`, {name, whatsapp});
+      await api.put(`/company/${id}`, {name, whatsapp});
       setCompanies(companies.map(company => company._id === id ? {name, whatsapp, _id: id} : company));
   
       setName('');
@@ -105,7 +105,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
   const handleDeleteCompany = async (_id) => {
     try {
-      await api.delete(`/companies/${_id}`);
+      await api.delete(`/company/${_id}`);
       setCompanies(companies.filter(company => company._id !== _id));
     }catch(err) {
       console.log(err);
@@ -200,7 +200,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await api.get('/companies');
+    const { data } = await api.get('/company');
 
     return {
       props: {

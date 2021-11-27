@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
   const {id} = context.query;
 
   const response = await api.get(
-    '/categoria/'+id,
+    '/category/'+id,
   );
   const produtos = await response.data;
 

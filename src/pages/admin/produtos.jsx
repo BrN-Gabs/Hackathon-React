@@ -70,7 +70,7 @@ export default function ProductRegistration({ products: fetchedProducts }) {
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/products', {name, photo, description, price});
+      const {data} = await api.post('/product', {name, photo, description, price});
 
       setProducts(products.concat(data.data));
   
@@ -102,7 +102,7 @@ export default function ProductRegistration({ products: fetchedProducts }) {
     try {
       setIsLoading(true);
 
-      await api.put(`/products/${id}`, {name, photo, description, price});
+      await api.put(`/product/${id}`, {name, photo, description, price});
       setProducts(products.map(product => product._id === id ? {name, photo, description, price, _id: id} : product));
   
       setName('');
@@ -121,7 +121,7 @@ export default function ProductRegistration({ products: fetchedProducts }) {
 
   const handleDeleteProduct = async (_id) => {
     try {
-      await api.delete(`/products/${_id}`);
+      await api.delete(`/product/${_id}`);
       setProducts(products.filter(product => product._id !== _id));
     }catch(err) {
       console.log(err);

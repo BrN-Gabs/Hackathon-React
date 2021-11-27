@@ -20,7 +20,7 @@ function CategoryIndex ({produtos}) {
 
 export async function getServerSideProps(context) {
 
-  const response = await api.get();
+  const response = await api.get('/category');
   const produtos = await response.data;
 
   return {

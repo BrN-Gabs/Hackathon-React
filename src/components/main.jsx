@@ -27,7 +27,7 @@ export const Header = () => {
                     <Navbar.Brand href="/"><img src={Logo}></img></Navbar.Brand>
                 <Nav className="me-auto">
                     {category.map((data) => (
-                        <Nav.Link href={`/categoria/${data.id}`} className="nav-link">
+                        <Nav.Link href={`/category/${data.id}`} className="nav-link">
                             {data.categoria}
                         </Nav.Link>    
                     ))}
