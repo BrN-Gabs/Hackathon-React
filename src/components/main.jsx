@@ -6,7 +6,9 @@ import {
     FormControl,
     FormLabel,
     Input,
-    FormErrorMessage
+    FormErrorMessage,
+    Select,
+    Td
 } from "@chakra-ui/react"
 
 export const Header = () => {
@@ -14,7 +16,7 @@ export const Header = () => {
     const [category, getCategory] = useState([]);
 
     useEffect(() => {
-        api.get('/categoria').then((response)=> {
+        api.get('/category').then((response)=> {
             getCategory(response.data);
         })
     },[])
@@ -28,7 +30,7 @@ export const Header = () => {
                 <Nav className="me-auto">
                     {category.map((data) => (
                         <Nav.Link href={`/category/${data.id}`} className="nav-link">
-                            {data.categoria}
+                            {data.name}
                         </Nav.Link>    
                     ))}
                     <Nav.Link href="/login">Login</Nav.Link>
@@ -88,6 +90,31 @@ export const InputForm = ({ label, name, error = null, ...rest }) => {
     )
 }
 
+export const InputFormSelect = ({rota, label, name, error = null, ...rest }) => {
+    
+    const [data, getData] = useState([]);
+    useEffect(() => {
+        api.get(rota).then((response)=> {
+            getData(response.data);
+        })
+    },[])
+
+
+    return (
+    <FormControl marginY="1rem" isInvalid={!!error}>
+        <FormLabel htmlFor={name}>{label}</FormLabel>
+        <Select placeholder="Selecione uma opção" name={name} id={name} {...rest}>
+            {data.map(item => ( 
+                <option value={item.id}>{item.name}</option>
+            ))}
+        </Select>
+
+        {!!error && <FormErrorMessage>{error}</FormErrorMessage>}
+        
+    </FormControl>
+    )
+}
+
 export const Verification = (email, senha, router) => {
     if (email == "teste@hotmail.com" && senha == "cavalo") {
       router.push('/admin/');
@@ -96,7 +123,18 @@ export const Verification = (email, senha, router) => {
     } 
 }
 
-export const formataValor = (valor) => {
+export const FormataValor = (valor) => {
     valor = parseFloat(valor);
     return valor.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
+}
+
+export const Teste = ({rota, id}) => {
+    const [data, getData] = useState([]);
+    useEffect(() => {
+        api.get(rota+id).then((response)=> {
+            getData(response.data);
+        })
+    },[])
+
+    return String(data.name);
 }

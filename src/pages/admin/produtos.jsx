@@ -13,13 +13,13 @@ import {
   Td,
   useToast
 } from "@chakra-ui/react"
-import {InputForm, formataValor} from '../../components/main';
+import {InputForm, FormataValor, InputFormSelect, Teste} from '../../components/main';
 import api from "../../services/api";
 
-export default function ProductRegistration({ products: fetchedProducts }) {
+export default function ProductRegistration({ product: fetchedProduct }) {
   const toast = useToast();
 
-  const [products, setProducts] = useState(fetchedProducts);
+  const [product, setProduct] = useState(fetchedProduct);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,10 +28,11 @@ export default function ProductRegistration({ products: fetchedProducts }) {
   const [photo, setPhoto] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-
+  const [category_id, setCategory] = useState('');
+  const [company_id, setCompany] = useState('');
   
 
-  const [errors, setErrors] = useState({name: null, photo: null, description: null, price: null});
+  const [errors, setErrors] = useState({name: null, photo: null, description: null, price: null, category_id: null, company_id: null});
 
   const isValidFormData = () => {
     if(!name) {
@@ -54,7 +55,17 @@ export default function ProductRegistration({ products: fetchedProducts }) {
         return false;
     }
 
-    if(products.some(product => product.name === name && product._id !== id)) {
+    if(!category_id) {
+      setErrors({category_id: 'Category is required'});
+      return false;
+    }
+
+    if(!company_id) {
+      setErrors({company_id: 'Company is required'});
+      return false;
+    }
+
+    if(product.some(product => product.name === name && product.id !== id)) {
       setErrors({name: "Name already in use"});
       return
     }
@@ -70,14 +81,16 @@ export default function ProductRegistration({ products: fetchedProducts }) {
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/product', {name, photo, description, price});
+      const {data} = await api.post('/product', {name, photo, description, price, category_id, company_id});
 
-      setProducts(products.concat(data.data));
+      setProduct(product.concat(data.data));
   
       setName('');
       setPhoto('');
       setDescription('');
       setPrice('');
+      setCategory('');
+      setCompany('');
       toggleFormState();
       setIsLoading(false);
 
@@ -102,13 +115,15 @@ export default function ProductRegistration({ products: fetchedProducts }) {
     try {
       setIsLoading(true);
 
-      await api.put(`/product/${id}`, {name, photo, description, price});
-      setProducts(products.map(product => product._id === id ? {name, photo, description, price, _id: id} : product));
+      await api.put(`/product/${id}`, {name, photo, description, price, category_id, company_id});
+      setProduct(product.map(product => product.id === id ? {name, photo, description, price, category_id, company_id, id: id} : product));
   
       setName('');
       setPhoto('');
       setDescription('');
       setPrice('');
+      setCategory('');
+      setCompany('');
       setId(null);
       toggleFormState();
       setIsLoading(false);
@@ -119,10 +134,10 @@ export default function ProductRegistration({ products: fetchedProducts }) {
     }
   }
 
-  const handleDeleteProduct = async (_id) => {
+  const handleDeleteProduct = async (id) => {
     try {
-      await api.delete(`/product/${_id}`);
-      setProducts(products.filter(product => product._id !== _id));
+      await api.delete(`/product/${id}`);
+      setProduct(product.filter(product => product.id !== id));
     }catch(err) {
       console.log(err);
     }
@@ -144,27 +159,28 @@ export default function ProductRegistration({ products: fetchedProducts }) {
     setPrice(float);
   }
 
+  const handleChangeCategory = (int) => {
+    setCategory(int);
+  }
+
+  const handleChangeCompany = (int) => {
+    setCompany(int);
+  }
 
   const handleShowUpdateProductForm = (product) => {
-    setId(product._id);
+    setId(product.id);
     setName(product.name);
     setPhoto(product.photo);
     setDescription(product.description);
     setPrice(product.price);
+    setCategory(product.category_id);
+    setCompany(product.company_id);
     setIsFormOpen(true);
   }
 
   const toggleFormState = () => {
     setIsFormOpen(!isFormOpen);
   }
-
-  // useEffect(() => {
-  //   api.get('/clients').then(({data}) => {
-  //     setClients(data.data)
-  //   })
-  // }, [])
-
-  
 
   return (
     <Box margin="4">
@@ -186,16 +202,15 @@ export default function ProductRegistration({ products: fetchedProducts }) {
         />
 
         <InputForm 
-          label="Photo" 
+          label="Foto" 
           name="photo" 
-          type="file"
           value={photo} 
           onChange={e => handleChangePhoto(e.target.value)}
           error={errors.photo}
         />
 
         <InputForm 
-          label="Description" 
+          label="Descrição" 
           name="description" 
           value={description} 
           onChange={e => handleChangeDescription(e.target.value)}
@@ -203,42 +218,66 @@ export default function ProductRegistration({ products: fetchedProducts }) {
         />
 
         <InputForm 
-          label="Price" 
+          label="Preço" 
           name="price" 
-          value={formataValor(price)} 
+          value={price} 
           onChange={e => handleChangePrice(e.target.value)}
           error={errors.price}
         />
 
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id? 'Atualizar' : 'Cadastrar'}</Button>
+        <InputFormSelect
+          label="Categorias" 
+          name="categorias"
+          value={category_id} 
+          type="number"
+          onChange={e => handleChangeCategory(e.target.value)}
+          error={errors.category_id}
+          rota="/category"
+        />
+
+        <InputFormSelect
+          label="Empresas" 
+          name="empresas" 
+          value={company_id}
+          type="number"
+          onChange={e => handleChangeCompany(e.target.value)}
+          error={errors.company_id}
+          rota="/company"
+        />
+
+        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
     <Table variant="simple" my="10">
       <Thead bgColor="blue.500">
         <Tr>
-          <Th textColor="white">Name</Th>
-          <Th textColor="white">Photo</Th>
-          <Th textColor="white">Description</Th>
-          <Th textColor="white">Price</Th>
+          <Th textColor="white">Nome</Th>
+          <Th textColor="white">Foto</Th>
+          <Th textColor="white">Descrição</Th>
+          <Th textColor="white">Preço</Th>
+          <Th textColor="white">Categoria</Th>
+          <Th textColor="white">Empresa</Th>
           <Th textColor="white">Action</Th>
         </Tr>
       </Thead>
       <Tbody>
-        {/* {products.map(product => (
+        {product.map(product => (
           <Tr key={product.name}>
             <Td>{product.name}</Td>
             <Td>{product.photo}</Td>
             <Td>{product.description}</Td>
-            <Td>{formataValor(product.price)}</Td>
+            <Td>{FormataValor(product.price)}</Td>
+            <Td><Teste rota="/category/" id={product.category_id}/></Td>
+            <Td><Teste rota="/company/" id={product.company_id}/></Td>
             <Td>
               <Flex justifyContent="space-between">
                 <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateProductForm(product)}>Editar</Button>
-                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteProduct(product._id)}>Remover</Button>
+                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteProduct(product.id)}>Remover</Button>
               </Flex>
             </Td>
           </Tr>
-        ))} */}
+        ))}
       </Tbody>
 
     </Table>
@@ -249,13 +288,13 @@ export default function ProductRegistration({ products: fetchedProducts }) {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await api.get('/product');
+    const response = await api.get('/product');
+    const product= await response.data;
 
     return {
-      props: {
-        products: data.data
-      }
-    }
+      props: {product}, 
+    };
+
   } catch (err) {
     console.log(err)
     return {

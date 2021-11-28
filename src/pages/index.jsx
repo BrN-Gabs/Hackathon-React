@@ -6,7 +6,7 @@ function CategoryIndex ({produtos}) {
     <>
       {produtos ?
         produtos.map((item) => (
-          <h1>{item.produto}</h1>
+          <h1>{item.name}</h1>
           
         ))
           

@@ -15,35 +15,31 @@ import {
 } from "@chakra-ui/react"
 import {InputForm} from '../../components/main';
 import api from "../../services/api";
+import {useRouter} from "next/router";
 
-export default function CategoryRegistration({ categories: fetchedCategories }) {
+export default function CategoryRegistration({ category: fetchedCategory }) {
+
   const toast = useToast();
 
-  const [categories, setCategories] = useState(fetchedCategories);
+  const [category, setCategory] = useState(fetchedCategory);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const [id, setId] = useState(null);
   const [name, setName] = useState('');
-  const [slug, setSlug] = useState('');
 
-  
+  const [errors, setErrors] = useState({name: null});
 
-  const [errors, setErrors] = useState({name: null, slug: null});
+  const router = useRouter();
 
   const isValidFormData = () => {
-    if(!name) {
+    if (!name) {
       setErrors({name: 'Name is required'});
       return false;
     }
 
-    if(!slug) {
-      setErrors({email: 'Slug is required'});
-      return false;
-    }
-
-    if(categories.some(category => category.slug === slug && category._id !== id)) {
-      setErrors({slug: "Slug already in use"});
+    if (category.some(category => category.name === name && category.id !== id)) {
+      setErrors({name: "Name already in use"});
       return
     }
 
@@ -58,12 +54,11 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/categories', {name, slug});
+      const {data} = await api.post('/category', {name});
 
-      setCategories(categories.concat(data.data));
+      setCategory(category.concat(data.data));
   
       setName('');
-      setSlug('');
       toggleFormState();
       setIsLoading(false);
 
@@ -73,7 +68,9 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
         duration: 3000,
         isClosable: true,
       })
-    }catch(err) {
+      
+      router.push('/admin/categorias');
+    } catch(err) {
       console.log(err);
       setIsLoading(false);
 
@@ -89,26 +86,25 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     try {
       setIsLoading(true);
 
-      await api.put(`/categories/${id}`, {name, slug});
-      setCategories(categories.map(category => category._id === id ? {name, slug, _id: id} : category));
+      await api.put(`/category/${id}`, {name});
+      setCategory(category.map(category => category._id === id ? {name, id: id} : category));
   
       setName('');
-      setSlug('');
       setId(null);
       toggleFormState();
       setIsLoading(false);
 
-    }catch(err) {
+    } catch(err) {
       console.log(err);
       setIsLoading(false);
 
     }
   }
 
-  const handleDeleteCategory = async (_id) => {
+  const handleDeleteCategory = async (id) => {
     try {
-      await api.delete(`/categories/${_id}`);
-      setCategories(categories.filter(category => category._id !== _id));
+      await api.delete(`/category/${id}`);
+      setCategory(category.filter(category => category.id !== id));
     }catch(err) {
       console.log(err);
     }
@@ -118,26 +114,15 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
     setName(text);
   }
 
-  const handleChangeSlug = (text) => {
-    setSlug(text);
-  }
-
   const handleShowUpdateCategoryForm = (category) => {
-    setId(category._id);
+    setId(category.id);
     setName(category.name);
-    setSlug(category.slug);
     setIsFormOpen(true);
   }
 
   const toggleFormState = () => {
     setIsFormOpen(!isFormOpen);
   }
-
-  // useEffect(() => {
-  //   api.get('/clients').then(({data}) => {
-  //     setClients(data.data)
-  //   })
-  // }, [])
 
   return (
     <Box margin="4">
@@ -157,16 +142,7 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
           onChange={e => handleChangeName(e.target.value)} 
           error={errors.name} 
         />
-
-        <InputForm 
-          label="Slug" 
-          name="slug" 
-          value={slug} 
-          onChange={e => handleChangeSlug(e.target.value)}
-          error={errors.slug}
-        />
-
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id? 'Atualizar' : 'Cadastrar'}</Button>
+        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{ id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
@@ -174,23 +150,27 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
       <Thead bgColor="blue.500">
         <Tr>
           <Th textColor="white">Name</Th>
-          <Th textColor="white">Slug</Th>
           <Th textColor="white">Action</Th>
         </Tr>
       </Thead>
       <Tbody>
-       {/* {categories.map(category => (
-          <Tr key={category.slug}>
+       {category ?
+          category.map(category => (
+          <Tr key={category.id}>
             <Td>{category.name}</Td>
-            <Td>{category.slug}</Td>
             <Td>
               <Flex justifyContent="space-between">
                 <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateCategoryForm(category)}>Editar</Button>
-                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCategory(category._id)}>Remover</Button>
+                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCategory(category.id)}>Remover</Button>
               </Flex>
             </Td>
           </Tr>
-        ))}  */}
+        ))
+        :
+        
+        <p>Error</p>
+
+        } 
       </Tbody>
 
     </Table>
@@ -201,13 +181,13 @@ export default function CategoryRegistration({ categories: fetchedCategories }) 
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await api.get('/categoria');
+    const response = await api.get('/category');
+    const category= await response.data;
 
     return {
-      props: {
-        categories: data.data
-      }
-    }
+      props: {category}, 
+    };
+
   } catch (err) {
     console.log(err)
     return {

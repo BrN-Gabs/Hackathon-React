@@ -15,11 +15,13 @@ import {
 } from "@chakra-ui/react"
 import {InputForm} from '../../components/main';
 import api from "../../services/api";
+import InputMask from 'react-input-mask';
 
-export default function CompanyRegistration({ companies: fetchedCompanies }) {
+
+export default function CompanyRegistration({ company: fetchedCompany }) {
   const toast = useToast();
 
-  const [companies, setCompanies] = useState(fetchedCompanies);
+  const [company, setCompany] = useState(fetchedCompany);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,7 +30,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
   const [whatsapp, setWhatsapp] = useState('');
 
   const [errors, setErrors] = useState({name: null, whatsapp: null});
-
+  
   const isValidFormData = () => {
     if(!name) {
       setErrors({name: 'Name is required'});
@@ -40,7 +42,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
       return false;
     }
 
-    if(companies.some(company => company.whatsapp === whatsapp && company._id !== id)) {
+    if(company.some(company => company.whatsapp === whatsapp && company.id !== id)) {
       setErrors({whatsapp: "Whatsapp already in use"});
       return
     }
@@ -58,7 +60,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
       setIsLoading(true);
       const {data} = await api.post('/company', {name, whatsapp});
 
-      setCompanies(companies.concat(data.data));
+      setCompany(company.concat(data.data));
   
       setName('');
       setWhatsapp('');
@@ -88,7 +90,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
       setIsLoading(true);
 
       await api.put(`/company/${id}`, {name, whatsapp});
-      setCompanies(companies.map(company => company._id === id ? {name, whatsapp, _id: id} : company));
+      setCompany(company.map(company => company.id === id ? {name, whatsapp, id: id} : company));
   
       setName('');
       setWhatsapp('');
@@ -103,10 +105,10 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
     }
   }
 
-  const handleDeleteCompany = async (_id) => {
+  const handleDeleteCompany = async (id) => {
     try {
-      await api.delete(`/company/${_id}`);
-      setCompanies(companies.filter(company => company._id !== _id));
+      await api.delete(`/company/${id}`);
+      setCompany(company.filter(company => company.id !== id));
     }catch(err) {
       console.log(err);
     }
@@ -121,7 +123,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
   }
 
   const handleShowUpdateCompanyForm = (company) => {
-    setId(company._id);
+    setId(company.id);
     setName(company.name);
     setWhatsapp(company.whatsapp);
     setIsFormOpen(true);
@@ -155,8 +157,7 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
           onChange={e => handleChangeName(e.target.value)} 
           error={errors.name} 
         />
-
-        <InputForm 
+        <InputForm
           label="Whatsapp" 
           name="whatsapp"
           type="number" 
@@ -164,8 +165,8 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
           onChange={e => handleChangeWhatsapp(e.target.value)}
           error={errors.whatsapp}
         />
-
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id? 'Atualizar' : 'Cadastrar'}</Button>
+  
+        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
@@ -178,18 +179,22 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
         </Tr>
       </Thead>
       <Tbody>
-        {/* {companies.map(company => (
+        {company.map(company => (
           <Tr key={company.whatsapp}>
             <Td>{company.name}</Td>
-            <Td>{company.whatsapp}</Td>
+            <Td>{
+              <InputMask
+                value={company.whatsapp}                        
+                mask="(99) 9 9999-9999">
+              </InputMask>}</Td>
             <Td>
               <Flex justifyContent="space-between">
                 <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateCompanyForm(company)}>Editar</Button>
-                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCompany(company._id)}>Remover</Button>
+                <Button size="sm" fontSize="smaller" colorScheme="red" onClick={() => handleDeleteCompany(company.id)}>Remover</Button>
               </Flex>
             </Td>
           </Tr>
-        ))} */}
+        ))}
       </Tbody>
 
     </Table>
@@ -200,13 +205,13 @@ export default function CompanyRegistration({ companies: fetchedCompanies }) {
 
 export const getServerSideProps = async () => {
   try {
-    const { data } = await api.get('/company');
+    const response = await api.get('/company');
+    const company= await response.data;
 
     return {
-      props: {
-        companies: data.data
-      }
-    }
+      props: {company}, 
+    };
+
   } catch (err) {
     console.log(err)
     return {
