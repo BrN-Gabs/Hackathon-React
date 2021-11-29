@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react'
-import {Button} from '@chakra-ui/react'
+import {Button, Container} from '@chakra-ui/react'
 import { 
   Flex, 
   Text,
@@ -125,6 +125,7 @@ export default function CategoryRegistration({ category: fetchedCategory }) {
   }
 
   return (
+    <Container maxW='container.lg'>
     <Box margin="4">
 
     <Flex color="white" justifyContent="space-between">
@@ -175,6 +176,7 @@ export default function CategoryRegistration({ category: fetchedCategory }) {
 
     </Table>
     </Box>
+    </Container>
   )
 }
 

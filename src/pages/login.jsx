@@ -2,6 +2,7 @@ import {Form, Button} from 'react-bootstrap';
 import {InputForm, Verification} from '../components/main';
 import {useState} from 'react'
 import {useRouter} from 'next/router';
+import { Container } from '@chakra-ui/react';
 
 
 const Login = () => {
@@ -36,6 +37,9 @@ const Login = () => {
 
     return (
       <>
+      <Container>
+      <br/>
+      <h1 className="text-center" style={{fontSize: 30}}><b>Entrar no Admin:</b></h1>
         <Form className="container mt-3 mb-3" onSubmit={handleLogin}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <InputForm
@@ -65,6 +69,8 @@ const Login = () => {
                 Entrar
             </Button>
         </Form>
+        <br/>
+      </Container>  
       </>
     )
 }

@@ -1,6 +1,6 @@
-import '../../styles/globals.css'
+import '../styles/globals.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Header, Footer, HeaderAdmin} from '../components/main';
+import { Header, Footer, HeaderAdmin, FooterAdmin} from '../components/main';
 import {useRouter} from "next/router";
 import { ChakraProvider } from "@chakra-ui/react"
 
@@ -15,7 +15,7 @@ function MyApp({ Component, pageProps }) {
           <ChakraProvider>
             <Component {...pageProps} />
           </ChakraProvider>
-          <Footer></Footer>
+          <FooterAdmin></FooterAdmin>
       </>
     } else {
       return <>

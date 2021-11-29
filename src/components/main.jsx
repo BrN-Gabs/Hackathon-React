@@ -1,15 +1,20 @@
-import {Navbar, Container, Nav, NavDropdown} from 'react-bootstrap';
-import api from "../services/api";
-import Logo from '../images/logo.png';
+import {Navbar, Container, Nav, Carousel} from 'react-bootstrap';
+import api from '../services/api';
+import logo from '../images/logo.png';
 import {useEffect, useState} from 'react';
 import { 
     FormControl,
     FormLabel,
     Input,
     FormErrorMessage,
+    Link,
     Select,
-    Td
 } from "@chakra-ui/react"
+import {RiAdminFill} from 'react-icons/ri';
+import Image from 'next/image';
+import marcas from '../images/marcas.png';
+import midia from '../images/midia.png';
+import midia2 from '../images/midia2.png';
 
 export const Header = () => {
 
@@ -24,19 +29,23 @@ export const Header = () => {
 
     return(
         <>
-            <Navbar bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand href="/"><img src={Logo}></img></Navbar.Brand>
-                <Nav className="me-auto">
-                    {category.map((data) => (
-                        <Nav.Link href={`/category/${data.id}`} className="nav-link">
-                            {data.name}
-                        </Nav.Link>    
-                    ))}
-                    <Nav.Link href="/login">Login</Nav.Link>
-                </Nav>
-                </Container>
-            </Navbar>
+            <Container>
+                <Navbar style={{backgroundColor: "#ABD7D5"}}>
+                    <Navbar.Brand href="/" style={{marginLeft: 15}}><Image src={logo} width="100" height="50"/></Navbar.Brand>
+                    <Nav className="me-auto" style={{margin: "auto"}}>
+                        {category.map((data) => (
+                            <Nav.Link style={{color: "black", fontSize: 20}} href={`/category/${data.id}`} className="nav-link">
+                                <b>{data.name}</b>
+                            </Nav.Link>    
+                            
+                        ))}
+                    </Nav>
+                    <Nav.Link href="/contato" alt="Contato" className="nav-link" style={{color: "black", fontSize: 20}}><b>Contato</b></Nav.Link>
+                    <Nav.Link href="/login" alt="Admin" className="float-end nav-link" style={{color: "black"}}><RiAdminFill size='30'/></Nav.Link>
+
+                    
+                </Navbar>
+            </Container>
             
         </>
     )
@@ -44,38 +53,113 @@ export const Header = () => {
 
 export const Footer = () => {
     return(
-        <>
-            <footer className="bg-dark">
-                <p className="text-center" style={{color: 'white'}}>
-                    Desenvolvido por Bruno Gabriel da Silva
-                </p>
-            </footer>
+        <> 
+            <Container>
+                <footer style={{backgroundColor: "#ABD7D5"}}>
+                    <div className="text-center" style={{color: 'black'}}>
+                        <br/>
+                        <h1><b>Empresas associadas:</b></h1>
+                        <Image src={marcas}/>
+                        <hr/>
+                        <br/>
+                        <div className="row">    
+                            <div className="col-10 col-md-5 m-auto">
+                                <h2 style={{fontSize:20}}><b>Redes Sociais:</b></h2>
+                                <br/>
+                                    <div>
+                                        <a href="https://www.instagram.com/infinitystore/" className="icons" title="Instagram" target="_blank">@infinitystore</a>
+                                        <br/>
+                                        <a href="https://github.com/BrN-Gabs" className="icons" title="GitHub" target="_blank">BrN-Gabs</a>
+                                        <br/>
+                                        <a href="https://github.com/JoasVieira" className="icons" title="GitHub" target="_blank">JoasVieira</a>
+                                        <br/>
+                                        <a href="https://github.com/JaimeBaldin" className="icons" title="GitHub" target="_blank">JaimeBaldin</a>
+                                    </div>  
+                                    <br/>
+                                    <Image src={midia} />
+                            </div>
+                            <div className="col-12 col-md-5 m-auto">
+                                <h2 style={{fontSize:20}}><b>Entre em contato:</b></h2>
+                                <br/>
+                                    <div>
+                                        <p><b>Whatsapp:</b> (44) 9 8813-8899</p>
+                                        <p><b>Email:</b> infinitystore@hotmail.com</p>
+                                    </div>
+                                    <br/>
+                                    <Image src={midia2} />
+                            </div> 
+                        </div>   
+                        <br/> 
+                        <hr/>
+                        <b>Desenvolvido por: Bruno Gabriel da Silva, Joás Vieira e Jaime Baldin</b>
+                    </div>
+                </footer>
+            </Container>
+            
         </>
     )
 }
 
 export const HeaderAdmin = () => {
     return(
-        <>
-            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-                <Container>
-                    <Navbar.Brand href="/admin"><img src={Logo}></img></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                    <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="me-auto">
-                        <Nav.Link href="/admin">Admin</Nav.Link>
-                            <NavDropdown title="Cadastro" id="collasible-nav-dropdown">
-                                <NavDropdown.Item href="/admin/produtos">Produtos</NavDropdown.Item>
-                                <NavDropdown.Item href="/admin/categorias">Categorias</NavDropdown.Item>
-                                <NavDropdown.Item href="/admin/empresas">Empresas</NavDropdown.Item>
-                            </NavDropdown>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>    
-            </Navbar>
+        <>  
+                <Navbar style={{backgroundColor: "#212529"}}>
+                    <Container>
+                        <Navbar.Brand href="/admin"><Image src={logo} width="100" height="50"/></Navbar.Brand>
+                        <h1 style={{color: "white", fontSize: 20}}>Seja bem vindo ao Admin</h1>
+                        <Nav.Link href="/" alt="Voltar" className="nav-link" style={{color: "white", fontSize: 20}}>Site</Nav.Link>
+                    </Container>
+                </Navbar>
         </>
     )
 }
+
+export const FooterAdmin = () => {
+    return(
+        <> 
+                <footer style={{backgroundColor: "#212529"}}>
+                    <div className="text-center" style={{color: 'white'}}>
+                        <br/>
+                        <h1><b>Empresas associadas:</b></h1>
+                        <Image src={marcas}/>
+                        <hr/>
+                        <br/>
+                        <div className="row">    
+                            <div className="col-10 col-md-5 m-auto">
+                                <h2 style={{fontSize:20}}><b>Redes Sociais:</b></h2>
+                                <br/>
+                                    <div>
+                                        <a href="https://www.instagram.com/infinitystore/" className="icons" title="Instagram" target="_blank">@infinitystore</a>
+                                        <br/>
+                                        <a href="https://github.com/BrN-Gabs" className="icons" title="GitHub" target="_blank">BrN-Gabs</a>
+                                        <br/>
+                                        <a href="https://github.com/JoasVieira" className="icons" title="GitHub" target="_blank">JoasVieira</a>
+                                        <br/>
+                                        <a href="https://github.com/JaimeBaldin" className="icons" title="GitHub" target="_blank">JaimeBaldin</a>
+                                    </div>  
+                                    <br/>
+                                    <Image src={midia} />
+                            </div>
+                            <div className="col-12 col-md-5 m-auto">
+                                <h2 style={{fontSize:20}}><b>Entre em contato:</b></h2>
+                                <br/>
+                                    <div>
+                                        <p><b>Whatsapp:</b> (44) 9 8813-8899</p>
+                                        <p><b>Email:</b> infinitystore@hotmail.com</p>
+                                    </div>
+                                    <br/>
+                                    <Image src={midia2} />
+                            </div> 
+                        </div>   
+                        <br/> 
+                        <hr/>
+                        <b>Desenvolvido por: Bruno Gabriel da Silva, Joás Vieira e Jaime Baldin</b>
+                    </div>
+                </footer>
+        </>
+    )
+}
+
 
 export const InputForm = ({ label, name, error = null, ...rest }) => {
     
@@ -137,4 +221,49 @@ export const Teste = ({rota, id}) => {
     },[])
 
     return String(data.name);
+}
+
+export const CarouselProduct = () => {
+    return (
+        <Carousel>
+            <Carousel.Item>
+                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
+            </Carousel.Item>
+            <Carousel.Item>
+                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
+            </Carousel.Item>
+            <Carousel.Item>
+                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
+            </Carousel.Item>
+        </Carousel>
+    )
+}
+
+export const GridProdutos = ({produtos}) => {
+    return (
+    <>
+        <br/>
+        <h1 className="text-center" style={{fontSize: 30}}><b>Produtos em Destaque:</b></h1>
+        <div className="row">
+                {produtos.map((item) => (
+                    <div className="col-12 col-md-4 text-center mt-4">
+                        <div className="card">
+                          {/* <Image src={item.photo} rounded/> */}
+                            <h2><b>{item.name}</b></h2>
+                                <div>
+                                    Valor: <span style={{color: "#820b89"}}>
+                                            <b>{FormataValor(item.price)}</b>
+                                        </span>
+                                    <br/>  
+                                </div>
+                            <Link href={'/product/'+item.id} style={{textDecoration: "none"}} className="btn btn-info">
+                                <b>Detalhes</b>
+                            </Link>
+                        </div>
+                    </div>    
+                ))}
+        </div>
+        <br/>
+    </>       
+    )
 }

@@ -11,6 +11,7 @@ import {
   Tr,
   Th,
   Td,
+  Container,
   useToast
 } from "@chakra-ui/react"
 import {InputForm} from '../../components/main';
@@ -140,6 +141,7 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
   // }, [])
 
   return (
+    <Container maxW='container.lg'>
     <Box margin="4">
 
     <Flex color="white" justifyContent="space-between">
@@ -199,6 +201,7 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
 
     </Table>
     </Box>
+    </Container>
   )
 }
 
