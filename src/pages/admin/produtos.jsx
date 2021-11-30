@@ -32,12 +32,9 @@ export default function ProductRegistration({ product: fetchedProduct }) {
   const [category_id, setCategory] = useState('');
   const [company_id, setCompany] = useState('');
 
-  const headers = {
-    'headers': {
-      'Content-Type': 'application/json'
-    }
-  }
-  
+  const value = parseFloat(price);
+  const categoryValue = parseInt(category_id);
+  const companyValue = parseInt(company_id);
 
   const [errors, setErrors] = useState({name: null, photo: null, description: null, price: null, category_id: null, company_id: null});
 
@@ -92,7 +89,15 @@ export default function ProductRegistration({ product: fetchedProduct }) {
       /* const formData = new FormData();
       formData.append('photo', photo); */
 
-      const {data} = await api.post('/product', {name, photo, description, price, category_id, company_id});
+      const {data} = await api.post('/product', 
+      {
+        name: name,
+        photo: photo,
+        description: description,
+        price: value,
+        category_id: categoryValue,
+        company_id: companyValue
+      });
 
       setProduct(product.concat(data.data));
   
@@ -127,7 +132,15 @@ export default function ProductRegistration({ product: fetchedProduct }) {
     try {
       setIsLoading(true);
 
-      await api.put(`/product/${id}`, {name, photo, description, price, category_id, company_id}, headers);
+      await api.put(`/product/${id}`, {
+        name: name,
+        photo: photo,
+        description: description,
+        price: value,
+        category_id: categoryValue,
+        company_id: companyValue
+      });
+      
       setProduct(product.map(product => product.id === id ? {name, photo, description, price, category_id, company_id, id: id} : product));
   
       setName('');
@@ -235,6 +248,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
           label="Preço" 
           name="price" 
           value={price} 
+          type="number"
           onChange={e => handleChangePrice(e.target.value)}
           error={errors.price}
         />
