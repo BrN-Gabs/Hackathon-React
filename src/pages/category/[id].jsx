@@ -1,17 +1,17 @@
 import { Container } from "@chakra-ui/react";
 import api from "../../services/api";
 import {GridProdutos} from "../../components/main";
-import { Link } from "@chakra-ui/layout";
-import Image from 'react-bootstrap/Image';
 
 function Category ({produtos}) {
   return(  
     <>{produtos ?
-        <Container>
+        <Container maxW='container.md'>
         <GridProdutos produtos={produtos}/>
         </Container>
       :
-       <p>Categoria sem Produtos</p>
+        <Container maxW='container.md'>
+          <p>Categoria sem Produtos</p>
+        </Container> 
       }
     </>
   );      

@@ -6,7 +6,7 @@ function CategoryIndex ({produtos}) {
   
   return(
     <>
-      <Container>
+      <Container maxW='container.md'>
       <CarouselProduct />
       <GridProdutos produtos={produtos} />
       </Container>

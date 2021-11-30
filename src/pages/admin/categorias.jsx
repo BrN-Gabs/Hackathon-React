@@ -131,7 +131,7 @@ export default function CategoryRegistration({ category: fetchedCategory }) {
     <Flex color="white" justifyContent="space-between">
       <Text color="black" fontSize="2xl">Lista de Categorias</Text>
       
-      <Button colorScheme="blue" onClick={toggleFormState}>{isFormOpen ? '-' : '+'}</Button>
+      <Button bgColor="#820b89" onClick={toggleFormState}><b>{isFormOpen ? '-' : '+'}</b></Button>
     </Flex>
 
     { isFormOpen && (
@@ -143,12 +143,12 @@ export default function CategoryRegistration({ category: fetchedCategory }) {
           onChange={e => handleChangeName(e.target.value)} 
           error={errors.name} 
         />
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{ id ? 'Atualizar' : 'Cadastrar'}</Button>
+        <Button fontSize="sm" alignSelf="flex-end" bgColor="#00febf" type="submit" isLoading={isLoading}>{ id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
     <Table variant="simple" my="10">
-      <Thead bgColor="blue.500">
+      <Thead bgColor="#820b89">
         <Tr>
           <Th textColor="white">Name</Th>
           <Th textColor="white">Action</Th>

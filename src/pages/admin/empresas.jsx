@@ -147,7 +147,7 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
     <Flex color="white" justifyContent="space-between">
       <Text color="black" fontSize="2xl">Lista de Empresas</Text>
       
-      <Button colorScheme="blue" onClick={toggleFormState}>{isFormOpen ? '-' : '+'}</Button>
+      <Button bgColor="#820b89" onClick={toggleFormState}><b>{isFormOpen ? '-' : '+'}</b></Button>
     </Flex>
 
     { isFormOpen && (
@@ -168,12 +168,12 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
           error={errors.whatsapp}
         />
   
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
+        <Button fontSize="sm" alignSelf="flex-end" bgColor="#00febf" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
     <Table variant="simple" my="10">
-      <Thead bgColor="blue.500">
+      <Thead bgColor="#820b89">
         <Tr>
           <Th textColor="white">Name</Th>
           <Th textColor="white">Whatsapp</Th>

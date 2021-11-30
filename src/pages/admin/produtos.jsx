@@ -11,6 +11,7 @@ import {
   Tr,
   Th,
   Td,
+  Container,
   useToast
 } from "@chakra-ui/react"
 import {InputForm, FormataValor, InputFormSelect, Teste} from '../../components/main';
@@ -30,6 +31,12 @@ export default function ProductRegistration({ product: fetchedProduct }) {
   const [price, setPrice] = useState('');
   const [category_id, setCategory] = useState('');
   const [company_id, setCompany] = useState('');
+
+  const headers = {
+    'headers': {
+      'Content-Type': 'application/json'
+    }
+  }
   
 
   const [errors, setErrors] = useState({name: null, photo: null, description: null, price: null, category_id: null, company_id: null});
@@ -81,6 +88,10 @@ export default function ProductRegistration({ product: fetchedProduct }) {
 
     try {
       setIsLoading(true);
+
+      /* const formData = new FormData();
+      formData.append('photo', photo); */
+
       const {data} = await api.post('/product', {name, photo, description, price, category_id, company_id});
 
       setProduct(product.concat(data.data));
@@ -112,10 +123,11 @@ export default function ProductRegistration({ product: fetchedProduct }) {
 
     if(!isValidFormData()) return;
 
+
     try {
       setIsLoading(true);
 
-      await api.put(`/product/${id}`, {name, photo, description, price, category_id, company_id});
+      await api.put(`/product/${id}`, {name, photo, description, price, category_id, company_id}, headers);
       setProduct(product.map(product => product.id === id ? {name, photo, description, price, category_id, company_id, id: id} : product));
   
       setName('');
@@ -183,12 +195,13 @@ export default function ProductRegistration({ product: fetchedProduct }) {
   }
 
   return (
+    <Container maxW='container.xl'>
     <Box margin="4">
 
     <Flex color="white" justifyContent="space-between">
       <Text color="black" fontSize="2xl">Lista de Produtos</Text>
       
-      <Button colorScheme="blue" onClick={toggleFormState}>{isFormOpen ? '-' : '+'}</Button>
+      <Button bgColor="#820b89" onClick={toggleFormState}><b>{isFormOpen ? '-' : '+'}</b></Button>
     </Flex>
 
     { isFormOpen && (
@@ -204,6 +217,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
         <InputForm 
           label="Foto" 
           name="photo" 
+          /* type="file" */
           value={photo} 
           onChange={e => handleChangePhoto(e.target.value)}
           error={errors.photo}
@@ -245,12 +259,12 @@ export default function ProductRegistration({ product: fetchedProduct }) {
           rota="/company"
         />
 
-        <Button fontSize="sm" alignSelf="flex-end" colorScheme="blue" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
+        <Button fontSize="sm" alignSelf="flex-end" bgColor="#00febf" type="submit" isLoading={isLoading}>{id ? 'Atualizar' : 'Cadastrar'}</Button>
       </VStack>
     )}
 
     <Table variant="simple" my="10">
-      <Thead bgColor="blue.500">
+      <Thead bgColor="#820b89">
         <Tr>
           <Th textColor="white">Nome</Th>
           <Th textColor="white">Foto</Th>
@@ -282,6 +296,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
 
     </Table>
     </Box>
+    </Container>
   )
 }
 

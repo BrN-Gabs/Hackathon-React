@@ -267,3 +267,32 @@ export const GridProdutos = ({produtos}) => {
     </>       
     )
 }
+
+export const PageProduct = ({produto}) => {
+    return(
+    <>
+        <br/>
+            <div className="row">
+                <div className="col-12 col-md-4 text-center">
+                        <h1 className="text-center">{produto.name}</h1>
+                            {/* <Image src={produto.photo} rounded/> */}
+                        <div>
+                            Valor: <span style={{color: "#820b89"}}>
+                                        <b>{FormataValor(produto.price)}</b>
+                                    </span>
+                                <br/>  
+                        </div>
+                    <hr/>
+                </div>
+                <div className="col-12 col-md-8">
+                    <h2 className="text-center">
+                        Descrição do Produto:
+                    </h2>
+                    <p>{produto.description}</p>
+                </div>    
+            </div>
+        <br/>
+    </>
+    )
+    
+}
