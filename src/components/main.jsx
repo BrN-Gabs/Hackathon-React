@@ -253,7 +253,7 @@ export const GridProdutos = ({produtos}) => {
                 {produtos.map((item) => (
                     <div className="col-12 col-md-4 text-center mt-4">
                         <div className="card">
-                        {/* <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (item.photo)} /> */}
+                         <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (item.photo)} />
                             <h2><b>{item.name}</b></h2>
                                 <div>
                                     Valor: <span style={{color: "#820b89"}}>
@@ -279,7 +279,7 @@ export const PageProduct = ({produto}) => {
         <br/>
             <div className="row">
                 <div className="col-12 col-md-4 text-center">
-                    {/* <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (produto.photo)} /> */}
+                    <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (produto.photo)} />
                         <br/>
                         <br/>
                         <div style={{fontSize: 30}}>
