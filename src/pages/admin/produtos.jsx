@@ -216,7 +216,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
   }
 
   return (
-    <Container maxW='container.xl'>
+    
     <Box margin="4">
 
     <Flex color="white" justifyContent="space-between">
@@ -313,10 +313,9 @@ export default function ProductRegistration({ product: fetchedProduct }) {
           </Tr>
         ))}
       </Tbody>
-
     </Table>
     </Box>
-    </Container>
+
   )
 }
 

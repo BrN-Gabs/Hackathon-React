@@ -1,6 +1,9 @@
 import {Navbar, Container, Nav, Carousel} from 'react-bootstrap';
 import api from '../services/api';
 import logo from '../images/logo.png';
+import firstmodel from '../images/firstmodel.png';
+import secondmodel from '../images/secondmodel.png';
+import thirdmodal from '../images/thirdmodal.png';
 import {useEffect, useState} from 'react';
 import { 
     FormControl,
@@ -107,7 +110,7 @@ export const HeaderAdmin = () => {
                     <Container>
                         <Navbar.Brand href="/admin"><Image src={logo} width="100" height="50"/></Navbar.Brand>
                         <h1 style={{color: "white", fontSize: 20}}>Seja bem vindo ao Admin</h1>
-                        <Nav.Link href="/" alt="Voltar" className="nav-link" style={{color: "white", fontSize: 20}}>Site</Nav.Link>
+                        <Nav.Link href="/" alt="Voltar" className="nav-link" style={{color: "white", fontSize: 20}}>Voltar ao Site</Nav.Link>
                     </Container>
                 </Navbar>
         </>
@@ -225,17 +228,19 @@ export const SearchForId = ({rota, id}) => {
 
 export const CarouselProduct = () => {
     return (
-        <Carousel>
-            <Carousel.Item>
-                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
-            </Carousel.Item>
-            <Carousel.Item>
-                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
-            </Carousel.Item>
-            <Carousel.Item>
-                <Image src={logo} alt="Primeiro Slide" className="d-block w-100"/>
-            </Carousel.Item>
-        </Carousel>
+        <Container>
+            <Carousel>
+                <Carousel.Item>
+                    <Image height="700" src={firstmodel} alt="Primeiro Slide" className="d-block w-100"/>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Image height="700" src={secondmodel} alt="Primeiro Slide" className="d-block w-100"/>
+                </Carousel.Item>
+                <Carousel.Item>
+                    <Image height="700" src={thirdmodal} alt="Primeiro Slide" className="d-block w-100"/>
+                </Carousel.Item>
+            </Carousel>
+        </Container>
     )
 }
 
