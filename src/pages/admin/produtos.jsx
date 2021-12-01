@@ -12,12 +12,15 @@ import {
   Th,
   Td,
   Container,
+  Image,
   useToast
 } from "@chakra-ui/react"
-import {InputForm, FormataValor, InputFormSelect, Teste} from '../../components/main';
+import {InputForm, ValueFormat, InputFormSelect, SearchForId} from '../../components/main';
 import api from "../../services/api";
+import InputMask from "react-input-mask";
 
 export default function ProductRegistration({ product: fetchedProduct }) {
+  
   const toast = useToast();
 
   const [product, setProduct] = useState(fetchedProduct);
@@ -86,9 +89,6 @@ export default function ProductRegistration({ product: fetchedProduct }) {
     try {
       setIsLoading(true);
 
-      /* const formData = new FormData();
-      formData.append('photo', photo); */
-
       const {data} = await api.post('/product', 
       {
         name: name,
@@ -124,6 +124,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
   }
 
   const handleSubmitUpdateProduct = async (e) => {
+
     e.preventDefault();
 
     if(!isValidFormData()) return;
@@ -172,8 +173,15 @@ export default function ProductRegistration({ product: fetchedProduct }) {
     setName(text);
   }
 
-  const handleChangePhoto = (text) => {
-    setPhoto(text);
+  const handleChangePhoto = (file) => {
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      const base64String = reader.result
+          .replace("data:", "")
+          .replace(/^.+,/, "")
+      setPhoto(base64String)
+    }
+    reader.readAsDataURL(file)
   }
 
   const handleChangeDescription = (text) => {
@@ -218,7 +226,7 @@ export default function ProductRegistration({ product: fetchedProduct }) {
     </Flex>
 
     { isFormOpen && (
-      <VStack marginY="1rem" as="form" onSubmit={id ? handleSubmitUpdateProduct : handleSubmitCreateProduct}>
+      <VStack marginY="1rem" as="form" encType="multipart/form-data" onSubmit={id ? handleSubmitUpdateProduct : handleSubmitCreateProduct}>
         <InputForm
           label="Nome"
           name="name"
@@ -230,9 +238,8 @@ export default function ProductRegistration({ product: fetchedProduct }) {
         <InputForm 
           label="Foto" 
           name="photo" 
-          /* type="file" */
-          value={photo} 
-          onChange={e => handleChangePhoto(e.target.value)}
+          type="file"
+          onChange={e => handleChangePhoto(e.target.files[0])}
           error={errors.photo}
         />
 
@@ -248,7 +255,6 @@ export default function ProductRegistration({ product: fetchedProduct }) {
           label="Preço" 
           name="price" 
           value={price} 
-          type="number"
           onChange={e => handleChangePrice(e.target.value)}
           error={errors.price}
         />
@@ -293,11 +299,11 @@ export default function ProductRegistration({ product: fetchedProduct }) {
         {product.map(product => (
           <Tr key={product.name}>
             <Td>{product.name}</Td>
-            <Td>{product.photo}</Td>
+            <Td><Image width="100" height="100" src={'http://localhost:8080/product/image/'+(product.photo)}/></Td>
             <Td>{product.description}</Td>
-            <Td>{FormataValor(product.price)}</Td>
-            <Td><Teste rota="/category/" id={product.category_id}/></Td>
-            <Td><Teste rota="/company/" id={product.company_id}/></Td>
+            <Td>{ValueFormat(product.price)}</Td>
+            <Td><SearchForId rota="/category/" id={product.category_id}/></Td>
+            <Td><SearchForId rota="/company/" id={product.company_id}/></Td>
             <Td>
               <Flex justifyContent="space-between">
                 <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateProductForm(product)}>Editar</Button>

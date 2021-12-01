@@ -207,12 +207,12 @@ export const Verification = (email, senha, router) => {
     } 
 }
 
-export const FormataValor = (valor) => {
+export const ValueFormat = (valor) => {
     valor = parseFloat(valor);
     return valor.toLocaleString('pt-br', {style:'currency', currency:'BRL'});
 }
 
-export const Teste = ({rota, id}) => {
+export const SearchForId = ({rota, id}) => {
     const [data, getData] = useState([]);
     useEffect(() => {
         api.get(rota+id).then((response)=> {
@@ -248,11 +248,11 @@ export const GridProdutos = ({produtos}) => {
                 {produtos.map((item) => (
                     <div className="col-12 col-md-4 text-center mt-4">
                         <div className="card">
-                          {/* <Image src={item.photo} rounded/> */}
+                        {/* <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (item.photo)} /> */}
                             <h2><b>{item.name}</b></h2>
                                 <div>
                                     Valor: <span style={{color: "#820b89"}}>
-                                            <b>{FormataValor(item.price)}</b>
+                                            <b>{ValueFormat(item.price)}</b>
                                         </span>
                                     <br/>  
                                 </div>
@@ -274,25 +274,41 @@ export const PageProduct = ({produto}) => {
         <br/>
             <div className="row">
                 <div className="col-12 col-md-4 text-center">
-                        <h1 className="text-center">{produto.name}</h1>
-                            {/* <Image src={produto.photo} rounded/> */}
-                        <div>
+                    {/* <Image width='300' height='300' src={'http://localhost:8080/product/image/' + (produto.photo)} /> */}
+                        <br/>
+                        <br/>
+                        <div style={{fontSize: 30}}>
                             Valor: <span style={{color: "#820b89"}}>
-                                        <b>{FormataValor(produto.price)}</b>
+                                        <b>{ValueFormat(produto.price)}</b>
                                     </span>
                                 <br/>  
                         </div>
                     <hr/>
                 </div>
                 <div className="col-12 col-md-8">
+                    <h1 style={{fontSize: 30}}><b>{produto.name}</b></h1>
+                    <br/>
                     <h2 className="text-center">
-                        Descrição do Produto:
+                        <b>Descrição do Produto:</b>
                     </h2>
                     <p>{produto.description}</p>
+                    <br/>
+                    <h2 className="text-center">Vendido e Entregue por {SearchCompany(produto.company_id)}</h2>
                 </div>    
             </div>
         <br/>
     </>
     )
     
+}
+
+export const SearchCompany = (id) => {
+    const [data, getData] = useState([]);
+    useEffect(() => {
+        api.get('/company/'+id).then((response)=> {
+            getData(response.data);
+        })
+    },[])
+
+    return data.name;
 }

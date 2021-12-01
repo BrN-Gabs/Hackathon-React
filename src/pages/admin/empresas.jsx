@@ -11,6 +11,7 @@ import {
   Tr,
   Th,
   Td,
+  Input,
   Container,
   useToast
 } from "@chakra-ui/react"
@@ -55,11 +56,16 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
   const handleSubmitCreateCompany = async (e) => {
     e.preventDefault();
 
+    
+
     if(!isValidFormData()) return;
 
     try {
       setIsLoading(true);
-      const {data} = await api.post('/company', {name, whatsapp});
+      const {data} = await api.post('/company', {
+        name: name, 
+        whatsapp: whatsapp.replace(/\D+/g, '')
+      });
 
       setCompany(company.concat(data.data));
   
@@ -90,7 +96,10 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
     try {
       setIsLoading(true);
 
-      await api.put(`/company/${id}`, {name, whatsapp});
+      await api.put(`/company/${id}`, {
+        name: name, 
+        whatsapp: whatsapp.replace(/\D+/g, '')
+      });
       setCompany(company.map(company => company.id === id ? {name, whatsapp, id: id} : company));
   
       setName('');
@@ -134,12 +143,6 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
     setIsFormOpen(!isFormOpen);
   }
 
-  // useEffect(() => {
-  //   api.get('/clients').then(({data}) => {
-  //     setClients(data.data)
-  //   })
-  // }, [])
-
   return (
     <Container maxW='container.lg'>
     <Box margin="4">
@@ -160,9 +163,10 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
           error={errors.name} 
         />
         <InputForm
+          as={InputMask} mask="(99) 9 9999-9999" maskChar={null}
+          type="text"
           label="Whatsapp" 
           name="whatsapp"
-          type="number" 
           value={whatsapp} 
           onChange={e => handleChangeWhatsapp(e.target.value)}
           error={errors.whatsapp}
@@ -184,11 +188,16 @@ export default function CompanyRegistration({ company: fetchedCompany }) {
         {company.map(company => (
           <Tr key={company.whatsapp}>
             <Td>{company.name}</Td>
-            <Td>{
-              <InputMask
-                value={company.whatsapp}                        
-                mask="(99) 9 9999-9999">
-              </InputMask>}</Td>
+            <Td>
+              {
+              <Input
+                as={InputMask} mask="(99) 9 9999-9999" maskChar={null}
+                value={company.whatsapp} 
+                isDisabled
+                style={{opacity: 1}}
+              />
+              }
+            </Td>
             <Td>
               <Flex justifyContent="space-between">
                 <Button size="sm" fontSize="smaller" colorScheme="yellow" mr="2" onClick={() => handleShowUpdateCompanyForm(company)}>Editar</Button>
