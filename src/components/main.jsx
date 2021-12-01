@@ -298,7 +298,7 @@ export const PageProduct = ({produto}) => {
                     </h2>
                     <p>{produto.description}</p>
                     <br/>
-                    <h2 className="text-center">Vendido e Entregue por {SearchCompany(produto.company_id)}</h2>
+                    <h2 className="text-center">Vendido e Entregue por: {SearchCompany(produto.company_id)}</h2>
                 </div>    
             </div>
         <br/>
@@ -315,5 +315,5 @@ export const SearchCompany = (id) => {
         })
     },[])
 
-    return data.name;
+    return <p><b>{data.name} - {data.whatsapp}</b></p>
 }
